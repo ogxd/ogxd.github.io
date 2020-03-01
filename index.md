@@ -2,6 +2,8 @@
 
 Welcome !
 
-{% for repository in site.github.public_repositories %}
-  * [{{ repository.name }}]({{ repository.html_url }})
+{% assign public_repositories = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
+{% for repository in public_repositories limit: 9 %}
+### {{ repository.name }}
+[Github]({{ repository.html_url }})
 {% endfor %}
