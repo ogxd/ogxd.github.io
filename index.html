@@ -29,17 +29,17 @@ title: ogxd
                 <span style="display:block;"><i class="fas fa-map-marker-alt"></i> &nbsp;&nbsp; Paris</span>
                 <span style="display:none;"><i class="fas fa-user-tie"></i> &nbsp;&nbsp; Available for hire</span>
                 <div class="socials">
-                <span><a href="https://www.dribbble.com/null" target="_blank" class="socials"><i class="fas fa-envelope"></i></a></span>
-                <span><a href="https://www.twitter.com/null" target="_blank" class="socials"><i class="fab fa-twitter"></i></a></span>
-                <span><a href="https://www.dribbble.com/null" target="_blank" class="socials"><i class="fab fa-github-alt"></i></a></span>
-                <span><a href="https://www.linkedin.com/in/null/" target="_blank" class="socials"><i class="fab fa-linkedin-in"></i></a></span>
+                <span><a href="mailto:oginiaux@gmail.com" target="_blank" class="socials"><i class="fas fa-envelope"></i></a></span>
+                <span><a href="https://twitter.com/ogtrouvetout" target="_blank" class="socials"><i class="fab fa-twitter"></i></a></span>
+                <span><a href="https://github.com/ogxd" target="_blank" class="socials"><i class="fab fa-github-alt"></i></a></span>
+                <span><a href="https://www.linkedin.com/in/olivier-giniaux-b35968a4/" target="_blank" class="socials"><i class="fab fa-linkedin-in"></i></a></span>
                 </div>
                 </div>
     </div>
     <div id="display">
-      <div id="work">
-        <h1>Projects.</h1>
-        <div class="projects" id="work_section">
+      <div id="opensource">
+        <h1>Open Source</h1>
+        <div class="projects" id="opensource_section">
 
 {% assign public_repositories = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
 {% for repository in public_repositories limit: 9 %}
@@ -62,25 +62,15 @@ title: ogxd
       </div>
 
       <div id="work">
-        <h1>@PiXYZ.</h1>
+        <h1>@PiXYZ</h1>
         <div class="projects" id="work_section">
 
-{% assign public_repositories = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
-{% for repository in public_repositories limit: 9 %}
-<a href="{{ repository.html_url }}" target="_blank">
-    <section>
-        <div class="section_title">{{ repository.name }}</div>
-        <div class="about_section">
-        <span style="display:none;">undefined</span>
         </div>
-        <div class="bottom_section">
-            <span style="display:inline-block;"><i class="fas fa-code"></i>&nbsp; {{ repository.language }}</span>
-            <span><i class="fas fa-star"></i>&nbsp; {{ repository.stargazers_count }}</span>
-            <span><i class="fas fa-code-branch"></i>&nbsp; {{ repository.forks_count }}</span>
-        </div>
-    </section>
-</a>
-{% endfor %}
+      </div>
+
+      <div id="work">
+        <h1>@Defacto</h1>
+        <div class="projects" id="work_section">
 
         </div>
       </div>
