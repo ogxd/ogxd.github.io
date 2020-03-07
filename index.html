@@ -21,24 +21,25 @@ title: ogxd
     <div id="profile">
       <div id="profile_img" style="background: url(https://avatars3.githubusercontent.com/u/12692438?v=4) center;"></div>
       <div id="username"><span style="display:block;">Olivier Giniaux</span><a href="https://github.com/ogxd">@ogxd</a></div>
-      <div id="userbio" style="display: block;">Software Engineer / Creative Coder</div>
+      <div id="userbio" style="display: block;">Software Engineer 🌞<br>Creative Coder 🌙</div>
       <div id="about">
-                <span style="display:block;"><i class="fas fa-users"></i> &nbsp; @PiXYZ-Software </span>
+                <span style="display:block;"><i class="fas fa-users"></i> &nbsp; @Pixyz Software </span>
                 <span style="display:none;"><i class="fas fa-envelope"></i> &nbsp; null</span>
                 <span style="display:none;"><i class="fas fa-link"></i> &nbsp; <a href=""></a></span>
                 <span style="display:block;"><i class="fas fa-map-marker-alt"></i> &nbsp;&nbsp; Paris</span>
                 <span style="display:none;"><i class="fas fa-user-tie"></i> &nbsp;&nbsp; Available for hire</span>
                 <div class="socials">
-                <span style="display:none !important;"><a href="https://www.twitter.com/null" target="_blank" class="socials"><i class="fab fa-twitter"></i></a></span>
-                <span style="display:none !important;"><a href="https://www.dribbble.com/null" target="_blank" class="socials"><i class="fab fa-dribbble"></i></a></span>
-                <span style="display:none !important;"><a href="https://www.linkedin.com/in/null/" target="_blank" class="socials"><i class="fab fa-linkedin-in"></i></a></span>
-                <span style="display:none !important;"><a href="https://www.medium.com/@null/" target="_blank" class="socials"><i class="fab fa-medium-m"></i></a></span>
+                <span><a href="https://www.dribbble.com/null" target="_blank" class="socials"><i class="fas fa-envelope"></i></a></span>
+                <span><a href="https://www.twitter.com/null" target="_blank" class="socials"><i class="fab fa-twitter"></i></a></span>
+                <span><a href="https://www.dribbble.com/null" target="_blank" class="socials"><i class="fab fa-github-alt"></i></a></span>
+                <span><a href="https://www.linkedin.com/in/null/" target="_blank" class="socials"><i class="fab fa-linkedin-in"></i></a></span>
                 </div>
                 </div>
     </div>
     <div id="display">
       <div id="work">
-        <h1>Work.</h1>
+        <h1>Projects.</h1>
+        <h2>Open Source.</h2>
         <div class="projects" id="work_section">
 
 {% assign public_repositories = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
@@ -57,20 +58,9 @@ title: ogxd
     </section>
 </a>
 {% endfor %}
-
         </div>
       </div>
-      <div id="forks" style="display:none;">
-        <h1>Forks.</h1>
-        <div class="projects" id="forks_section"></div>
-      </div>
-      <div id="blog_section">
-        <h1>Blog.</h1>
-        <div id="blogs"></div>
-      </div>
-      <div id="footer">
-        <a href="https://github.com/imfunniee" target="_blank">made on earth by a human</a>
-      </div>
+      <h2>@ Company.</h2>
     </div>
     <script type="text/javascript">
       setTimeout(function() {
