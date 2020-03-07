@@ -39,7 +39,6 @@ title: ogxd
     <div id="display">
       <div id="work">
         <h1>Projects.</h1>
-        <h2>Open Source.</h2>
         <div class="projects" id="work_section">
 
 {% assign public_repositories = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
@@ -61,6 +60,31 @@ title: ogxd
 
         </div>
       </div>
+
+      <div id="work">
+        <h1>@PiXYZ.</h1>
+        <div class="projects" id="work_section">
+
+{% assign public_repositories = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
+{% for repository in public_repositories limit: 9 %}
+<a href="{{ repository.html_url }}" target="_blank">
+    <section>
+        <div class="section_title">{{ repository.name }}</div>
+        <div class="about_section">
+        <span style="display:none;">undefined</span>
+        </div>
+        <div class="bottom_section">
+            <span style="display:inline-block;"><i class="fas fa-code"></i>&nbsp; {{ repository.language }}</span>
+            <span><i class="fas fa-star"></i>&nbsp; {{ repository.stargazers_count }}</span>
+            <span><i class="fas fa-code-branch"></i>&nbsp; {{ repository.forks_count }}</span>
+        </div>
+    </section>
+</a>
+{% endfor %}
+
+        </div>
+      </div>
+
       <div id="forks" style="display:none;">
         <h1>Forks.</h1>
         <div class="projects" id="forks_section"></div>
