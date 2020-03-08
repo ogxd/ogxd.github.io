@@ -13,6 +13,10 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
+p {
+  line-height: 150%;
+}
+
 #loading {
   width: 100vw;
   height: 100vh;
@@ -350,6 +354,35 @@ body {
 
 .bottom_section span i {
   font-size: 15px;
+}
+
+.md-chip {
+  display: inline-block;
+  border-radius: 32px;
+  margin: 0 12px 16px 0;
+  background: hsl(0, 0%, 90%);
+}
+
+.md-chip-first {
+  display: inline-block;
+  background: hsl(0, 0%, 80%);
+  padding: 10px 20px;
+  border-radius: 32px;
+  font-size: 18px;
+}
+
+.md-chip-second {
+  display: inline-block;
+  background: transparent;
+  padding: 10px 20px 10px 15px;
+  border-radius: 32px;
+  font-size: 18px;
+  word-spacing: 10px;
+}
+
+.md-chips {
+  padding: 12px 0;
+  margin: 0;  
 }
 
 .socials {
