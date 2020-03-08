@@ -7,6 +7,7 @@ title: ogxd
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ page.title }}</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -37,24 +38,37 @@ title: ogxd
       </div>
     </div>
     <div id="display">
-      <div id="work">
+      <div id="projects">
         <h1>Open Source</h1>
-        <div class="projects" id="work_section">
+        <div class="projects" id="projects_section">
 
 {% assign public_repositories = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
-{% for repository in public_repositories limit: 9 %}
+{% for repository in public_repositories limit: 8 %}
 <a href="{{ repository.html_url }}" target="_blank">
-    <section>
-        <div class="section_title">{{ repository.name }}</div>
-        <div class="about_section">
-        <span style="display:none;">undefined</span>
-        </div>
-        <div class="bottom_section">
-            <span style="display:inline-block;"><i class="fas fa-code"></i>&nbsp; {{ repository.language }}</span>
-            <span><i class="fas fa-star"></i>&nbsp; {{ repository.stargazers_count }}</span>
-            <span><i class="fas fa-code-branch"></i>&nbsp; {{ repository.forks_count }}</span>
-        </div>
-    </section>
+  <section>
+    <div class="section_title">{{ repository.name }}</div>
+    <div class="about_section">
+      <span style="display:none;">undefined</span>
+    </div>
+    <div class="bottom_section">
+      <span style="display:inline-block;"><i class="fas fa-code"></i>&nbsp; {{ repository.language }}</span>
+      <span><i class="fas fa-star"></i>&nbsp; {{ repository.stargazers_count }}</span>
+      <span><i class="fas fa-code-branch"></i>&nbsp; {{ repository.forks_count }}</span>
+    </div>
+  </section>
+</a>
+<a href="{{ repository.html_url }}" target="_blank">
+  <section>
+    <div class="section_title">{{ repository.name }}</div>
+    <div class="about_section">
+      <span style="display:none;">undefined</span>
+    </div>
+    <div class="bottom_section">
+      <span style="display:inline-block;"><i class="fas fa-code"></i>&nbsp; {{ repository.language }}</span>
+      <span><i class="fas fa-star"></i>&nbsp; {{ repository.stargazers_count }}</span>
+      <span><i class="fas fa-code-branch"></i>&nbsp; {{ repository.forks_count }}</span>
+    </div>
+  </section>
 </a>
 {% endfor %}
 
@@ -62,16 +76,32 @@ title: ogxd
       </div>
 
       <div id="work">
-        <h1>@PiXYZ</h1>
+        <h1>Work</h1>
         <div class="projects" id="work_section">
-WIP
-        </div>
-      </div>
-
-      <div id="work">
-        <h1>@Defacto</h1>
-        <div class="projects" id="work_section">
-WIP
+          <a href="www.pixyz-software.com" target="_blank">
+            <section>
+              <div class="section_title">Pixyz Software</div>
+              <div class="about_section">
+                <span style="">PiXYZ Software is the leading solution for large CAD data preparation, optimization & review. It features powerful algorithms to streamline the engineering to visualization conversion workflow and enables new possibilities in 3D rendering for the industry.
+                  I am mainly in charge of the development of the PiXYZ Plugin for Unity and other Unity related developments.</span>
+              </div>
+              <div class="bottom_section">
+                <span><i class="fas fa-external-link-alt"></i>&nbsp; www.pixyz-software.com</span>
+              </div>
+            </section>
+          </a>
+          <a href="www.defacto.aero" target="_blank">
+            <section>
+              <div class="section_title">Defacto</div>
+              <div class="about_section">
+                <span style="">DEFACTO is a software development company offering a one-stop solution for the generation of validated layout data and standardized certification documents for aircraft cabin customization.
+                  I was in charge of all 3D related developments, such as realtime visualization, VR, CAD model automatic optimization, as well as the software licensing system and its deployment.</span>
+              </div>
+              <div class="bottom_section">
+                <span><i class="fas fa-external-link-alt"></i>&nbsp; www.defacto.aero</span>
+              </div>
+            </section>
+          </a>
         </div>
       </div>
 
@@ -79,6 +109,7 @@ WIP
         <h1>Forks.</h1>
         <div class="projects" id="forks_section"></div>
       </div>
+
       <div id="blog_section">
         <h1>Blog.</h1>
         <div id="blogs"></div>
@@ -122,6 +153,16 @@ WIP
 
     <script>
       const magicProjectsGrid = new MagicGrid({
+        container: "#projects_section",
+        animate: false,
+        gutter: 30, // default gutter size
+        static: true,
+        useMin: false,
+        maxColumns: 2,
+        useTransform: true
+      });
+
+      const magicWorkGrid = new MagicGrid({
         container: "#work_section",
         animate: false,
         gutter: 30, // default gutter size
@@ -143,6 +184,7 @@ WIP
 
       $("document").ready(() => {
         magicProjectsGrid.listen();
+        magicWorkGrid.listen();
         magicForksGrid.listen();
       });
     </script>

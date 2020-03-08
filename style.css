@@ -74,7 +74,7 @@ body {
   font-size: 50px;
   color: var(--text-color);
   font-weight: bold;
-  font-family: "Questrial", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .emoji {
@@ -308,7 +308,7 @@ body {
   display: inline-block;
   border-radius: 5px;
   color: var(--text-color);
-  border: 1px solid rgb(0, 0, 0, 0.08);
+  border: 2px solid rgb(0, 0, 0, 0.08);
   box-shadow: 0px 0px 0px rgb(0, 0, 0, 0);
   transition: 0.4s ease-in-out;
   transform: scale(1);
