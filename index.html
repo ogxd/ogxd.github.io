@@ -44,22 +44,22 @@ title: ogxd
         <h1>Open Source</h1>
         <div class="projects" id="projects_section">
 
-{% assign public_repositories = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
-{% for repository in public_repositories limit: 8 %}
-<a href="{{ repository.html_url }}" target="_blank">
-  <section>
-    <div class="section_title">{{ repository.name }}</div>
-    <div class="about_section">
-      <span>{{ repository.description }}</span>
-    </div>
-    <div class="bottom_section">
-      <span style="display:inline-block;"><i class="fas fa-code"></i>&nbsp; {{ repository.language }}</span>
-      <span><i class="fas fa-star"></i>&nbsp; {{ repository.stargazers_count }}</span>
-      <span><i class="fas fa-code-branch"></i>&nbsp; {{ repository.forks_count }}</span>
-    </div>
-  </section>
-</a>
-{% endfor %}
+        {% assign public_repositories = site.github.public_repositories | where:'fork', false | sort: 'stargazers_count' | reverse %}
+        {% for repository in public_repositories limit: 8 %}
+        <a href="{{ repository.html_url }}" target="_blank">
+          <section>
+            <div class="section_title">{{ repository.name }}</div>
+            <div class="about_section">
+              <span>{{ repository.description }}</span>
+            </div>
+            <div class="bottom_section">
+              <span style="display:inline-block;"><i class="fas fa-code"></i>&nbsp; {{ repository.language }}</span>
+              <span><i class="fas fa-star"></i>&nbsp; {{ repository.stargazers_count }}</span>
+              <span><i class="fas fa-code-branch"></i>&nbsp; {{ repository.forks_count }}</span>
+            </div>
+          </section>
+        </a>
+        {% endfor %}
 
         </div>
       </div>
@@ -192,7 +192,7 @@ title: ogxd
         gutter: 30, // default gutter size
         static: true,
         useMin: false,
-        maxColumns: 2,
+        maxColumns: 3,
         useTransform: true
       });
 

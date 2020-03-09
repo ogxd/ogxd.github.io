@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Poppins");
+/* @import url("https://fonts.googleapis.com/css?family=Poppins"); */
 @import url("https://fonts.googleapis.com/css?family=Questrial");
 
 body {
@@ -10,7 +10,7 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   align-items: center;
-  font-family: "Poppins", sans-serif;
+  font-family: "Questrial", sans-serif;
 }
 
 p {
@@ -54,7 +54,7 @@ p {
 }
 
 #profile {
-  width: 24vw;
+  width: 16vw;
   padding: 4vh 3vw;
   height: 92vh;
   display: flex;
@@ -67,18 +67,18 @@ p {
 }
 
 #display {
-  width: 64vw;
+  width: 72vw;
   padding: 4vh 3vw;
   height: 92vh;
   display: inline-block;
-  padding-left: 33vw;
+  padding-left: 25vw;
 }
 
 #display h1 {
-  font-size: 50px;
+  font-size: 40px;
   color: var(--text-color);
   font-weight: bold;
-  font-family: "Poppins", sans-serif;
+  font-family: "Questrial", sans-serif;
 }
 
 .emoji {
@@ -97,7 +97,7 @@ p {
 #username_blog {
   font-size: 18px;
   color: var(--text-color);
-  font-family: "Poppins", sans-serif;
+  font-family: "Questrial", sans-serif;
   font-weight: bold;
 }
 
@@ -108,7 +108,7 @@ p {
 
 #username_blog b {
   font-size: 12px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Questrial", sans-serif;
   font-weight: bold;
 }
 
@@ -299,7 +299,7 @@ p {
 
 .projects a {
   /* 30px is the gutter size in magic grid */
-  width: calc(49% - 30px);
+  width: calc(33% - 30px);
   /* 49% avoids a weird single column on some wide screens */
   display: flex;
   text-decoration: none;
