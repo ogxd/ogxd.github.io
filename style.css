@@ -54,7 +54,7 @@ p {
 }
 
 #profile {
-  width: 16vw;
+  width: 24vw;
   padding: 4vh 3vw;
   height: 92vh;
   display: flex;
@@ -67,11 +67,11 @@ p {
 }
 
 #display {
-  width: 72vw;
+  width: 64vw;
   padding: 4vh 3vw;
   height: 92vh;
   display: inline-block;
-  padding-left: 25vw;
+  padding-left: 33vw;
 }
 
 #display h1 {
@@ -299,7 +299,7 @@ p {
 
 .projects a {
   /* 30px is the gutter size in magic grid */
-  width: calc(33% - 30px);
+  width: calc(49% - 30px);
   /* 49% avoids a weird single column on some wide screens */
   display: flex;
   text-decoration: none;
