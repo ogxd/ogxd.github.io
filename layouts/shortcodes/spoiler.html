@@ -1,0 +1,4 @@
+<details>
+    <summary>{{ with .Get "text" }}{{ . | safeHTML }}{{ else }}&nbsp;{{ end }}</summary>
+    {{ .Inner | markdownify }}
+</details>
