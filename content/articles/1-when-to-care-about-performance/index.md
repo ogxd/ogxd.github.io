@@ -28,11 +28,11 @@ When planning a development, think about how often (roughly) the resulting code 
 
 The performance of the code developers write is roughly proportional to the time they spend on it. Experience may modulate this relationship, but it's still a good rule of thumb.
 
-<img style="width:256px" src="perf-vs-dev-time.png" />
+![](perf-vs-dev-time.png)
 
 Unless you're only programming for fun, it's more than likely that you are writing code for a few bucks, and most likely you're paid based on time. This means it is expected for you to be productive, thus limiting the time you can spend coding a given feature.
 
-<img style="width:256px" src="perf-vs-dev-time-bounded.png" />
+![](perf-vs-dev-time-bounded.png)
 
 Given this limited time, the level of optimization of the code you're about to ship is going to be limited as well. This is why it's important to know when to care about performance, and when not to, and only then estimate the time you're going to spend on it.
 
