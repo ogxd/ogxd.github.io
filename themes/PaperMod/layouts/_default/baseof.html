@@ -18,26 +18,6 @@
         {{- block "main" . }}{{ end }}
     </main>
     {{ partialCached "footer.html" . .Layout .Kind (.Param "hideFooter") (.Param "ShowCodeCopyButtons") -}}
-    {{ if .Page.Store.Get "hasMermaid" }}
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-    <script src="{{ "/load-mermaid.js" | urlize | relURL }}"></script>
-    <script>initMermaid()</script>
-    {{ end }}   
-    {{- if (not site.Params.disableThemeToggle) }}
-    <script>
-        document.getElementById("theme-toggle").addEventListener("click", () => {
-            if (document.body.className.includes("dark")) {
-                document.body.classList.remove('dark');
-                localStorage.setItem("pref-theme", 'light');
-                document.body.dispatchEvent(new CustomEvent('light-theme-set'))
-            } else {
-                document.body.classList.add('dark');
-                localStorage.setItem("pref-theme", 'dark');
-                document.body.dispatchEvent(new CustomEvent('dark-theme-set'))
-            }
-        })
-    </script>
-    {{- end }} 
 </body>
 
 </html>
