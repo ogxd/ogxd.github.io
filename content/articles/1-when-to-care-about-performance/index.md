@@ -1,7 +1,7 @@
 ---
 title: "When to care about performance"
 date: 2024-02-03T08:11:55+02:00
-draft: true
+draft: false
 summary: 
 tags: 
 - dotnet
@@ -10,40 +10,13 @@ tags:
 - debt
 ---
 
-Trauma of the past
+Many languages and frameworks have been designed to make developers more productive. This is a good thing, but it has a side effect: it makes developers less aware of the performance implications of their code.  
 
-Moore's law
+While hardware has been getting faster and faster over the years, the place software has taken in our lives has also been growing. In the end, the performance of the code we write is still important, and it's important to know when to care about it (and when not to).  
 
-Culture of productivity
+I won't revive traumas of the past and talk about big O time and space complexity, nor I will serve you a "premature optimization is the root of all evil" bullshit.  
 
-Many languages and frameworks have been designed to make developers more productive. This is a good thing, but it has a side effect: it makes developers less aware of the performance implications of their code.
-
-Feels like a waste of time. Frustration
-
-This article goes contre courant. The point is not to say
-In fact, I wrote this article in VS code, and github copilot kept suggesting exactly the kind of banalities I am willing to fight in this article.
-
-Leave technical debt of code optimization for another article.
-
-"Premature optimization is the root of all evil" - Donald Knuth
-
-Problems
-- When should I care about performance? What is "premature optimization"?
-- 
-
-What is performance? CPU? Latency? Memory usage? 
-Performance is 
-Big O notation space & time complexity
-
-Code optimization, trade-off and entropy
-
-
-Context
-What is the frequency? How often my function is going to be invoked?
-
----
-
-TODO
+The pressure of delivering performant code in a culture of productivity can be very frustrating, and so here I am going to give you an easy and pragmatic approach to knowing when to care about performance, and when not to, so you all be the most productive and happy developer 😊.
 
 # TL;DR; for lazy readers
 
@@ -61,40 +34,42 @@ Unless you're only programming for fun, it's more than likely that you are writi
 
 <img style="width:256px" src="perf-vs-dev-time-bounded.png" />
 
-TODO
+Given this limited time, the level of optimization of the code you're about to ship is going to be limited as well. This is why it's important to know when to care about performance, and when not to, and only then estimate the time you're going to spend on it.
 
-# What's the context?
+# When to care about performance?
 
-TODO
+Here is the dreaded question. I'll spare you the "it depends" answer, as I think I have a very systemic and pragmatic approach to answering it.  
+
+Just ask yourself those two questions:
+- How often is the code going to be invoked?
+- How likely is it to change in the future?
 
 ## Frequency
 
-TODO
+I think that's the most important question to ask. **The more often a piece of code is going to be invoked, the more you should care about its performance**. Sounds obvious, right?
+
+You don't have to know exactly how often the code you're about to write is going to be invoked. You often can tell by the nature of the feature and system you're working on. For instance, a piece of code that is going to be invoked for every incoming request on a web service is likely to be invoked a lot, while a piece of code that is going to be invoked only once when the application starts is likely to be invoked less often.
+
+Like [combinatorial explosion](https://en.wikipedia.org/wiki/Combinatorial_explosion), the invocation frequency for a piece of code can escalate quickly. For instance, a feature that checks X business rules for every incoming request on a web service that receives Y requests per second per instance, with Z instances, is going to be invoked about X * Y * Z times per second. With 1000 rules, 1000 rps and 1000 instances, that's 1 billion invocations per second.
+
+At 1 billion invocations per second, a piece of code that only takes 10us of CPU time is going to take 10s of CPU time per second or 10 full CPU cores. If we consider a power consumption of 10W per core, that's 100W or power consumption, or 72000kWh per month. At $0.25 per kWh (current price in France), that's $18000 per month 💸.  
+Allocations-wise, a single memory allocation in this path is going to generate 1 million allocations per second per instance, which is likely to generate a lot of pressure on the garbage collector, thus increasing the latency of the service 🐌.  
+Environmentally speaking, it's not too good either 😵.
+
+Put in perspective, it might be interesting to spend a few days optimizing this piece of code.
+
+On the other hand, if the code is called at startup, is intended for internal tooling, or is behind a heavily sampled path, then it's likely called not so frequently, and you should not spend too much time optimizing it and rather focus on readability, maintainability and testability.
 
 ## Volatility (a.k.a. "code churn")
 
-Optimization does not necessarily means increased complexity: often, simplicity is the key to performance. Still, we can't deny that once the simplicity card has been played, the next optimization levers can imply more complex data structures, exotic algorithms, or unsafe code to name a few. This can make a piece of code more complex to grasp, maintain and evolve.  
+Optimization does not necessarily mean increased complexity: often, simplicity is the key to performance. Still, we can't deny that once the simplicity card has been played, the next optimization levers can imply more complex data structures, exotic algorithms, or unsafe code to name a few. This can make a piece of code more complex to grasp, maintain and evolve.  
 
-For this reason, it's important to consider the volatility of the code. If the code is going to be modified often, then you should be more cautious about the trade-offs you make. For instance, a new business feature is likely to receive a lot of changes, so you may want not to go too deep while optimizing. On the other hand, a change on the logging stack is less likely to change (given its company-internal nature and the fact that logging is a well-defined practice), thus is more appropriate to use more complex optimization techniques in this context. 
+For this reason, it's important to consider the volatility of the code. **If the code is going to be modified often, then you should be more cautious about the trade-offs you make**.  
 
-## Some examples
-
-### Example 1: Write some internal tooling for your company
-
-TODO
-
-### Example 2: Do a background work for a desktop software
-
-TODO
-
-### Example 3: Apply business rules against incoming requests for a web service
-
-TODO
-
-### Example 4: Change some internals of the Linux kernel networking stack
-
-TODO
+For instance, a new business feature is likely to receive a lot of changes, so you may want not to go too deep while optimizing. On the other hand, a change on the logging stack is less likely to change (given its company-internal nature and the fact that logging is a well-defined practice), thus is more appropriate to use more complex optimization techniques in this context. 
 
 # So what then?
 
-TODO
+Well, if you've estimated that the code you're about to write isn't going to be invoked often, you're free to focus on using what you're most comfortable with, and what is the most readable, maintainable and testable for your team.
+
+Otherwise, it depends on how often is going to be invoked and how likely it is to change in the future. Benchmark, optimize, profile, and iterate. Ask your peers for help if you're stuck, ask for feedback when you think you've started pulling some unusual tricks, and don't forget to test your code in the real world. And don't forget to have fun! 😊
