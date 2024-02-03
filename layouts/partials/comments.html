@@ -21,7 +21,7 @@ document.body.addEventListener("light-theme-set", () => {
     setGiscusTheme("light");
 })
 
-const  theme = localStorage.getItem("pref-theme")  ?? "{{- if eq site.Params.defaultTheme `dark` -}}
+const theme = localStorage.getItem("pref-theme") ?? "{{- if eq site.Params.defaultTheme `dark` -}}
         {{- print " dark" }}
     {{- end -}}";
 
