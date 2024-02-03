@@ -5,10 +5,11 @@ theme: 'PaperMod'
 
 enableInlineShortcodes: true
 enableRobotsTXT: true
+enableEmoji: true
+
 buildDrafts: false
 buildFuture: true
 buildExpired: true
-enableEmoji: true
 
 menu:
   main:
@@ -29,7 +30,7 @@ outputs:
   home:
     - HTML
     - RSS
-    - JSON # nécessaire pour la recherche
+    - JSON
 
 taxonomies:
   tag: tags
@@ -40,7 +41,7 @@ params:
 
   ShowCodeCopyButtons: true
   ShowBreadCrumbs: true
-  ShowToc: true # afficher le sommaire
+  ShowToc: true
   ShowReadingTime: true 
   ShowPostNavLinks: true
   hideFooter: true
