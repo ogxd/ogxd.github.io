@@ -28,7 +28,7 @@ Big O notation space & time complexity
 Context
 What is the frequency ?
 
-{{< columns >}} <!-- begin columns block -->
+{{% columns %}}
 # Example 1
 Lorem markdownum insigne...
 
@@ -37,7 +37,7 @@ Lorem markdownum insigne...
 # Example 2
 Lorem markdownum insigne...
 
-{{< /columns >}}
+{{% /columns %}}
 
 Code optimization, trade-off and entropy
 
