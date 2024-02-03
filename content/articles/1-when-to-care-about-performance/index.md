@@ -52,7 +52,7 @@ You don't have to know exactly how often the code you're about to write is going
 
 Like [combinatorial explosion](https://en.wikipedia.org/wiki/Combinatorial_explosion), the invocation frequency for a piece of code can escalate quickly. For instance, a feature that checks X business rules for every incoming request on a web service that receives Y requests per second per instance, with Z instances, is going to be invoked about X * Y * Z times per second. With 1000 rules, 1000 rps and 1000 instances, that's 1 billion invocations per second.
 
-At 1 billion invocations per second, a piece of code that only takes 10us of CPU time is going to take 10s of CPU time per second or 10 full CPU cores. If we consider a power consumption of 10W per core, that's 100W or power consumption, or 72000kWh per month. At $0.25 per kWh (current price in France), that's $18000 per month 💸.  
+At 1 billion invocations per second, a piece of code that only takes 10µs of CPU time is going to take 10s of CPU time per second or 10 full CPU cores. If we consider a power consumption of 10W per core, that's 100W or power consumption, or 72000kWh per month. At $0.25 per kWh (current price in France), that's $18000 per month 💸.  
 Allocations-wise, a single memory allocation in this path is going to generate 1 million allocations per second per instance, which is likely to generate a lot of pressure on the garbage collector, thus increasing the latency of the service 🐌.  
 Environmentally speaking, it's not too good either 😵.
 
