@@ -16,7 +16,7 @@ While hardware has been getting faster and faster over the years, the place soft
 
 I won't revive traumas of the past and talk about big O time and space complexity, nor I will serve you a "premature optimization is the root of all evil" bullshit.  
 
-The pressure of delivering performant code in a culture of productivity can be very frustrating, and so here I am going to give you an easy and pragmatic approach to knowing when to care about performance, and when not to, so you all be the most productive and happy developer 😊.
+The pressure of delivering performant code in a culture of productivity can be very frustrating, and so here I am going to give you an easy and pragmatic approach to knowing when to care about performance, and when not to, so you can all be productive and happy developers 😊.
 
 # TL;DR; for lazy readers
 
