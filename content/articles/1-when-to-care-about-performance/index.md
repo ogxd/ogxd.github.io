@@ -4,7 +4,10 @@ date: 2024-02-03T08:11:55+02:00
 draft: false
 summary: 
 tags: 
-- dotnet
+- software engineering
+- computer science
+- programming
+- development
 - performance
 - optimization
 - debt
@@ -70,6 +73,8 @@ For instance, a new business feature is likely to receive a lot of changes, so y
 
 # So what then?
 
-Well, if you've estimated that the code you're about to write isn't going to be invoked often, you're free to focus on using what you're most comfortable with, and what is the most readable, maintainable and testable for your team.
+Well, if you've estimated that the code you're about to write isn't going to be invoked often, you're free to focus on using what you're the most comfortable with, and what is the most readable, maintainable and testable for your team. As your software evolves and your business grows, at some point, you might have to revisit the code you've written and optimize it, but unless you knew it in advance, you shall not feel guilty about it and can leave this to the future you or your successors. If you have doubts, you can always instrument your code to measure its performance/invocation frequency and come back to it later.
 
-Otherwise, it depends on how often is going to be invoked and how likely it is to change in the future. Benchmark, optimize, profile, and iterate. Ask your peers for help if you're stuck, ask for feedback when you think you've started pulling some unusual tricks, and don't forget to test your code in the real world. And don't forget to have fun! 😊
+Otherwise, it depends on how often is going to be invoked and how likely this code is to evolve in the future. Benchmark, optimize, profile, and iterate. Ask your peers for help if you're stuck, ask for feedback when you think you've started pulling some unusual tricks, and test your code in the real world.  
+
+And more importantly, don't forget to have fun! 😊 
