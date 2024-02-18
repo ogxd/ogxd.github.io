@@ -86,7 +86,9 @@ We can now read beyond safely, but we still need to mask the bytes that don't be
 #[inline(always)]
 pub unsafe fn get_partial_unsafe(data: *const State, len: usize) -> State {
     let indices = _mm_set_epi8(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
+    // Create a mask by comparing the indices to the length
     let mask = _mm_cmpgt_epi8(_mm_set1_epi8(len as i8), indices);
+    // Mask the bytes that don't belong to our stream
     return _mm_and_si128(_mm_loadu_si128(data), mask);
 }
 ```
@@ -99,27 +101,27 @@ For instance, let's say our input data is a blob of 7 bytes, like so:
 
 ```
   1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16
-0x01 42 08 CD 89 10 00 ?? ?? ?? ?? ?? ?? ?? ?? ??
+0x01 42 08 7A 89 10 00 ?? ?? ?? ?? ?? ?? ?? ?? ??
 ```
 
 We read this into a 16 bytes vector, and we mask the bytes that don't belong to our stream:
 
 ```
   1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16
-0x01 42 08 CD 89 10 00 00 00 00 00 00 00 00 00 00
+0x01 42 08 7A 89 10 00 00 00 00 00 00 00 00 00 00
 ```
 
 But what if the input is now a blob of 6 bytes?
 ```
   1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16
-0x01 42 08 CD 89 10 ?? ?? ?? ?? ?? ?? ?? ?? ?? ??
+0x01 42 08 7A 89 10 ?? ?? ?? ?? ?? ?? ?? ?? ?? ??
 ```
 
 We would read this into a 16 bytes vector, and we mask the bytes that don't belong to our stream:
 
 ```
   1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16
-0x01 42 08 CD 89 10 00 00 00 00 00 00 00 00 00 00
+0x01 42 08 7A 89 10 00 00 00 00 00 00 00 00 00 00
 ```
 
 The result is the same as the previous one, while the input was different (this one had one more 0x00). This is a problem, as we want to make sure that the length of the input is taken into account. 
@@ -130,7 +132,57 @@ A trick is to wrap-add the length of the uneven part to every byte of the masked
 
 A complementary trick to this optimization is to read the uneven part first, and then read the 16 bytes chunks. For inputs greater than 16 bytes, it means we can assume it's safe to read beyond the end of the buffer since there will be more bytes to read after. This enables us to skip the safety check in this specific scenario.
 
-# Conclusion
+## Putting it all together
+
+```rust
+#[cfg(target_arch = "x86_64")]
+use core::arch::x86_64::*;
+
+pub type State = __m128i;
+
+#[inline(always)]
+pub unsafe fn get_partial(p: *const State, len: usize) -> State {
+    // Safety check
+    if check_same_page(p) {
+        get_partial_unsafe(p, len)
+    } else {
+        get_partial_safe(p, len)
+    }
+}
+
+#[inline(always)]
+unsafe fn check_same_page(ptr: *const State) -> bool {
+    let address = ptr as usize;
+    // Mask to keep only the last 12 bits
+    let offset_within_page = address & (PAGE_SIZE - 1);
+    // Check if the 16nd byte from the current offset exceeds the page boundary
+    offset_within_page < PAGE_SIZE - VECTOR_SIZE
+}
+
+#[inline(always)]
+pub unsafe fn get_partial_safe(data: *const State, len: usize) -> State {
+    // Temporary buffer filled with zeros
+    let mut buffer = [0i8; VECTOR_SIZE];
+    // Copy data into the buffer
+    std::ptr::copy(data as *const i8, buffer.as_mut_ptr(), len);
+    // Load the buffer into a __m256i vector
+    let partial_vector = _mm_loadu_si128(buffer.as_ptr() as *const State);
+    _mm_add_epi8(partial_vector, _mm_set1_epi8(len as i8))
+}
+
+#[inline(always)]
+pub unsafe fn get_partial_unsafe(data: *const State, len: usize) -> State {
+    let indices = _mm_set_epi8(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
+    // Create a mask by comparing the indices to the length
+    let mask = _mm_cmpgt_epi8(_mm_set1_epi8(len as i8), indices);
+    // Mask the bytes that don't belong to our stream
+    let partial_vector = _mm_and_si128(_mm_loadu_si128(data), mask);
+    // Wrap-add the length of the uneven part to every byte of the masked vector
+    _mm_add_epi8(partial_vector, _mm_set1_epi8(len as i8))
+}
+```
+
+### Some results!
 
 Here is the same benchmark including the URBD optimization. The chart is log-scaled in both X and Y. You can see that GxHash is now the fastest non-cryptographic hashing algorithm even for small payloads, and by quite a margin.
 
