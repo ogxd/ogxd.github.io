@@ -1,7 +1,7 @@
 ---
 title: "Unsafe read beyond of death"
 date: 2024-02-03T08:11:55+02:00
-draft: true
+draft: false
 summary: 
 tags: 
 - unsafe
