@@ -1,7 +1,7 @@
 ---
 title: "Timeout and latency percentiles SLOs for distributed systems"
-date: 2024-02-03T08:11:55+02:00
-draft: false
+date: 2024-02-18T08:11:55+02:00
+draft: true
 summary: 
 tags: 
 - architecture
@@ -25,6 +25,8 @@ In a distributed architecture involving many different services and technologies
 # Modeling latency percentiles
 
 ![](slo.png)
+
+#e2e1df
 
 ## Sequentialism
 
