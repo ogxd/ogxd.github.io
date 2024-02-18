@@ -16,7 +16,7 @@ While developing GxHash over my spare time during my last parent leave (babies s
 
 I called this optimization 🥁🥁🥁 "**Unsafe Read Beyond of Death**" (or URBD).
 
-To achieve maximum performance, one of the design goals of GxHash was to use SIMD instructions as much as possible. SIMD instructions are a set of instructions that allow a single instruction to operate on multiple data elements in parallel. In practice, with a single SIMD instruction operating on 16 or even 32 bytes of data at once, I would mean that the input data would be required to be a multiple of 16 or 32 bytes. Other highly-optimized hashing algorithms that rely on SIMD usually the uneven part with scalar instructions, which is slower and implies special handling (thus more instructions).
+To achieve maximum performance, one of the design goals of GxHash was to use SIMD instructions as much as possible. SIMD instructions are a set of instructions that allow a single instruction to operate on multiple data elements in parallel. In practice, with a single SIMD instruction operating on 16 or even 32 bytes of data at once, input data would be required to be a multiple of 16 or 32 bytes, but in practice, inputs are of arbitrary lengths. Other highly-optimized hashing algorithms that rely on SIMD usually process the uneven part with scalar instructions, which is slower and implies special handling (thus more instructions).
 
 For GxHash, I decided to avoid such scalar operations and load this uneven part into a 16 bytes zero-padded SIMD register. A simple and safe way to do this is to copy the uneven part into a zero-initialized temporary buffer, and then load this buffer into a SIMD register.
 
@@ -37,7 +37,7 @@ pub unsafe fn get_partial_safe(data: *const State, len: usize) -> State {
 }
 ```
 
-This worked well and simplified the code a lot by allowing a generalization of the hashing logic to only operate on 16 bytes chunks. However, this approach has a performance cost: the copy operation. While GxHash still outperformed other hashing algorithms for large payloads, the copy operations were a huge bottleneck for small payloads. A reason for this is that the algorithm was reading from CPU cache, and this copy operation was reading from RAM, which is orders of magnitude slower.
+This worked well and simplified the code a lot by allowing a generalization of the hashing logic to only operate on 16 bytes chunks. However, this approach has a performance cost: the copy operation. While GxHash still outperformed other hashing algorithms for large payloads, the copy operation was a huge bottleneck for small payloads. A reason for this is that the algorithm was very CPU cache friendly while this single copy operation was reading from RAM, which is orders of magnitude slower.
 
 ![](copy.png)
 
@@ -93,9 +93,9 @@ pub unsafe fn get_partial_unsafe(data: *const State, len: usize) -> State {
 }
 ```
 
-## Mixing length back into equation
+## Mixing length back into the equation
 
-We're not done yet. As we're read N bytes into a 16 bytes vector, we kind of lost the context of the length of that uneven part.
+We're not done yet. As we read N bytes into a 16 bytes vector, we kind of lost the context of the length of that uneven part.
 
 For instance, let's say our input data is a blob of 7 bytes, like so:
 
@@ -128,11 +128,13 @@ The result is the same as the previous one, while the input was different (this 
 
 A trick is to wrap-add the length of the uneven part to every byte of the masked vector. This way, the masked bytes will be different for different lengths of the input.
 
-## Read uneven part first
+## Read the uneven part first
 
 A complementary trick to this optimization is to read the uneven part first, and then read the 16 bytes chunks. For inputs greater than 16 bytes, it means we can assume it's safe to read beyond the end of the buffer since there will be more bytes to read after. This enables us to skip the safety check in this specific scenario.
 
-## Putting it all together
+# Putting it all together
+
+Here is the final code for the URBD optimization:
 
 ```rust
 #[cfg(target_arch = "x86_64")]
@@ -159,17 +161,7 @@ unsafe fn check_same_page(ptr: *const State) -> bool {
     offset_within_page < PAGE_SIZE - VECTOR_SIZE
 }
 
-#[inline(always)]
-pub unsafe fn get_partial_safe(data: *const State, len: usize) -> State {
-    // Temporary buffer filled with zeros
-    let mut buffer = [0i8; VECTOR_SIZE];
-    // Copy data into the buffer
-    std::ptr::copy(data as *const i8, buffer.as_mut_ptr(), len);
-    // Load the buffer into a __m256i vector
-    let partial_vector = _mm_loadu_si128(buffer.as_ptr() as *const State);
-    _mm_add_epi8(partial_vector, _mm_set1_epi8(len as i8))
-}
-
+// Fast path
 #[inline(always)]
 pub unsafe fn get_partial_unsafe(data: *const State, len: usize) -> State {
     let indices = _mm_set_epi8(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
@@ -180,9 +172,21 @@ pub unsafe fn get_partial_unsafe(data: *const State, len: usize) -> State {
     // Wrap-add the length of the uneven part to every byte of the masked vector
     _mm_add_epi8(partial_vector, _mm_set1_epi8(len as i8))
 }
+
+// Fallback
+#[inline(always)]
+pub unsafe fn get_partial_safe(data: *const State, len: usize) -> State {
+    // Temporary buffer filled with zeros
+    let mut buffer = [0i8; VECTOR_SIZE];
+    // Copy data into the buffer
+    std::ptr::copy(data as *const i8, buffer.as_mut_ptr(), len);
+    // Load the buffer into a __m256i vector
+    let partial_vector = _mm_loadu_si128(buffer.as_ptr() as *const State);
+    _mm_add_epi8(partial_vector, _mm_set1_epi8(len as i8))
+}
 ```
 
-### Some results!
+# Some results!
 
 Here is the same benchmark including the URBD optimization. The chart is log-scaled in both X and Y. You can see that GxHash is now the fastest non-cryptographic hashing algorithm even for small payloads, and by quite a margin.
 
