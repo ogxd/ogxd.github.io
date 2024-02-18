@@ -37,7 +37,8 @@ taxonomies:
   category: categories
 
 params:
-  defaultTheme: auto
+  defaultTheme: dark
+  disableThemeToggle: true
 
   ShowCodeCopyButtons: true
   ShowBreadCrumbs: true
