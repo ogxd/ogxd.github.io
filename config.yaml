@@ -58,6 +58,8 @@ params:
   socialIcons:
     - name: github
       url: "https://github.com/ogxd"
+    - name: linkedin
+      url: "https://www.linkedin.com/in/oginiaux/"
     - name: Rss
       url: "index.xml"
 
