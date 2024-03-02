@@ -184,9 +184,9 @@ In .NET, the `Activity` class has a `Context` property that holds the trace cont
 
 In my opinion, the best way to propagate the context is to do it manually. You can use the `Activity.Current.GetW3CTraceParent()` extension method I provided at the end of this article to get a string that complies with the W3C `traceparent` header format. Then you can pass this string to the next service in the request, either as a header or in any other form for protocols not covered by OpenTelemetry specifications. The `tracestate` header can be read as is from `Activity.Current.TraceStateString`.
 
-# Practical Snippets for Tracing in .NET
+# Bonus
 
-I'd like to share some snippets that I found useful when implementing tracing in .NET.
+I'd like to share some resources that I found useful when implementing tracing in .NET.
 
 ## Useful Extensions
 
@@ -227,11 +227,26 @@ public static Activity StartActivityExternal(this ActivitySource source, string 
     return activity;
 }
 
-// Get a string that complies with the W3C traceparent header format
+// Extension a string that complies with the W3C traceparent header format
 public static string GetW3CTraceParent(this Activity activity)
 {
     return $"00-{activity.Context.TraceId}-{activity.Context.SpanId}-{(byte)activity.Context.TraceFlags:x2}";
 }
+
+// Extension to set an Activity in an error state
+public static void SetError(this Activity activity, Exception exception, string message = "")
+{
+    string description = string.IsNullOrEmpty(message) ? string.Empty : $"{message}. ";
+    description += $"Exception: {exception}";
+    // Extension method from OpenTelemetry libraries that sets some tags
+    activity.SetStatus(Status.Error.WithDescription(description));
+    // Specific to the Activity API
+    activity.SetStatus(ActivityStatusCode.Error, description);
+}
 ```
 
-TODO: Some functional example
+## Useful Links
+
+- [Grafana Tempo](https://grafana.com/docs/tempo/latest/#tempo-documentation). A distributed tracing backend that is easy to set up and use. Available as a self-hosted solution (open source) or as a managed service (paid). In my opinion, it is the best tracing backend available and follows OpenTelemetry specifications quite well. The TraceQL language is very powerful. It does take some time to set up and learn however.
+- [opentelemetry.io](https://opentelemetry.io/). Always a good starting point for learning about tracing.
+- [Article on hidden working of AsyncLocal and ExecutionContext](https://medium.com/net-under-the-hood/hidden-workings-of-execution-context-in-net-43b491726c65) by Nakib. A good read to understand the magic behind `AsyncLocal<T>` and `ExecutionContext`.
