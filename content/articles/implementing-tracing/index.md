@@ -34,7 +34,7 @@ Here is a non-exhaustive mapping table:
 | Activity Baggage | Missing | I don't recommend using Activity Baggages at all since there isn't really any equivalent on the Opentelemetry side. |
 | Activity DisplayName | Span Name | |
 
-## How it works
+## How It Works
 
 This API is a little uncommon, to say the least. I'll spare you the details. To make it simple, it works with 3 components:
 - `Activity`: The equivalent of a Span in OpenTelemetry. It represents a unit of work.
@@ -80,8 +80,8 @@ Here you can see that you can, with a few tweaks on this example:
 - The source named ["Microsoft.AspNetCore"](https://github.com/dotnet/aspnetcore/blob/c7c76d7d3bb30e29e8386d1a3e6dae9e307fd0de/src/Hosting/Hosting/src/WebHostBuilder.cs#L288) is used by ASP.NET Core to create Activities for incoming HTTP requests.
 - The source named ["System.Net.Http"](https://github.com/dotnet/runtime/blob/ce6cf4b2e2a8c7d80ed7b31487eaab574d9007fa/src/libraries/System.Net.Http/src/System/Net/Http/DiagnosticsHandler.cs#L19) is used by `HttpClient` to create Activities for outgoing HTTP requests.
 
-Third-party libraries that are up-to-date with tracing will usually define their own ActivitySource and create Activities for their operations.
-Unfortunately, not all libraries are up-to-date with tracing, and you might have to create your own ActivitySource and create Activities for their operations, sometimes requiring you to monkey-patch the library or make wrappers around it 😢.  
+Third-party libraries that are up-to-date with tracing will usually define their own `ActivitySource` and create Activities for their operations.
+Unfortunately, not all libraries are up-to-date with tracing, and you might have to create your own `ActivitySource` and create Activities for their operations, sometimes requiring you to monkey-patch the library or make wrappers around it 😢.  
 Fortunately, the OpenTelemetry for .NET packages helps you in this situation with what they call "instrumentation". An example is the SQL instrumentation where [they listen to diagnostics events](https://github.com/dotnet/SqlClient/issues/2210) (a different piece of tech than the Activity API) emitted from `Microsoft.Data.Sql`. Hopefully one day more libraries will (properly) implement tracing, and we won't have to rely on third parties to do it for us.
 
 ### The OpenTelemetry .NET Libraries
@@ -105,14 +105,14 @@ static async Task DoWorkAsync()
     Activity.Current = source.StartActivity("B");
     await SetThirdValueAsync();
     Console.WriteLine(Activity.Current.OperationName); // "B"
-｝
+}
 
 static async Task DoMoreWorkAsync()
 {
     Activity.Current = source.StartActivity("C");
     await Task.Delay(1000);
     Console.WriteLine(Activity.Current.OperationName); // "C"
-｝
+}
 ```
 
 It is very powerful, but it can also be unintuitive for the non-initiated. Here is an example of a pitfall: https://x.com/MrPeterLMorris/status/1763502114184053198?s=20
@@ -178,7 +178,11 @@ I prefer using the `tracestate` header with a value such as `no-sampling` for my
 
 # Context propagation
 
-TODO: A word on custom protocols (eg gRPC, GET, RabbitMq, ...)
+Context propagation is what makes tracing distributed: it's the process of passing the trace context from one service to the next. See the OpenTelemetry documentation about context propagation: https://opentelemetry.io/docs/concepts/context-propagation/.
+
+In .NET, the `Activity` class has a `Context` property that holds the trace context. The OpenTelemetry .NET libraries provide "Propagators" to automatically copy the context into HTTP headers when making outgoing HTTP requests, and to extract the context from incoming HTTP requests. It's nice, but you may not want to inject these headers in every request you perform (EG you call a third-party API, they don't need your tracing headers). Also, it will only work for HTTP requests, which is far from covering all the I/Os you might have in your system (gRPC + protobuf, RabbitMQ, Kafka, ...).  
+
+In my opinion, the best way to propagate the context is to do it manually. You can use the `Activity.Current.GetW3CTraceParent()` extension method I provided at the end of this article to get a string that complies with the W3C `traceparent` header format. Then you can pass this string to the next service in the request, either as a header or in any other form for protocols not covered by OpenTelemetry specifications. The `tracestate` header can be read as is from `Activity.Current.TraceStateString`.
 
 # Practical Snippets for Tracing in .NET
 
@@ -221,6 +225,12 @@ public static Activity StartActivityExternal(this ActivitySource source, string 
         }
     }
     return activity;
+}
+
+// Get a string that complies with the W3C traceparent header format
+public static string GetW3CTraceParent(this Activity activity)
+{
+    return $"00-{activity.Context.TraceId}-{activity.Context.SpanId}-{(byte)activity.Context.TraceFlags:x2}";
 }
 ```
 
