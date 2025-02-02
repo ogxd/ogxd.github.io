@@ -12,7 +12,7 @@ tags:
 - lru
 ---
 
-In this article I'd like to share my journey learning about caching, and my research on how to make it more efficient. This article is the first in a series of articles on caching, and here we'll start by discussing the challenges and memory considerations when doing in-memory caching.
+In this article I'd like to share my journey learning about caching, and my research on how to make it more efficient. This article is the first in a serie of articles about caching, and here we'll start by discussing the challenges and memory considerations when doing in-memory caching.
 
 This was done as part of my day job as a Staff backend engineer at Equativ, a leading provider of digital advertising solutions, offering a range of products and services to help businesses reach their target audiences and achieve their marketing goals. 
 
@@ -22,7 +22,7 @@ Caching helps reduce the load on various services of the ad service pipeline sin
 
 Caching can also help to reduce the latency, or delay, in the ad delivery process since less I/Os implies less latency in the process of delivering the ad to the user. This not only improves the user experience but makes ad-serving more competitive in a real-time bidding context and means fewer in-flight requests at any given moment on the infrastructure (less pressure).
 
-Unfortunately, caching is a complex computer science subject and many papers were published with various algorithms to try to maximize the caching efficiency in a wide variety of contexts. Before getting into any particular implementation details, we'll delve in this article into what would make a given implementation better suited than another. 
+Unfortunately, caching is a complex computer science subject and many papers were published with various algorithms to try to maximize the caching efficiency in a wide variety of contexts. Let's dive into the theory!
 
 # Reducing cache misses
 
@@ -123,11 +123,11 @@ Here I decided to talk about memory fragmentation as part of a whole different s
 
 Most cache eviction policies (actually, all that I can think of) require the usage of one or more doubly linked lists to achieve true O(1) operations since such data structures allow O(1) removals and O(1) insertions while keeping order. Unfortunately, in Rust, Dotnet, Python, Java and probably many other languages, base libraries include a doubly linked list implementation where a node is an object individually allocated on the heap. This will inevitably imply a lot of allocations/deallocations and memory fragmentation.    
 
-![Fragmented Heap](heap-frag.png)    
+![Fragmented Heap](heap-frag-dark.png)    
 
 There is however a possible alternative, which we call arena-based linked lists. In short, as opposed to allocating nodes individually on the heap, we allocate one continuous buffer. The base principle came to us when we looked at how dotnet base `Dictionary<K, V>` class handles new entries with fields keeping track of free slots. For our linked list implementation, when the buffer is allocated, even if there is room for 1000 nodes but only 10 are actually used, we keep behind the scenes 990 "free" nodes linked together. Then, when a new entry is added to the list, we simply have to pick the first free entry at O(1) cost without having to allocate anything (unless the buffer is too small and needs to be resized). This is kind of having a linked list within our linked list for tracking free nodes. Thanks to this, we are now able to implement eviction policies with minimal allocations, less fragmentation, and better CPU affinity.    
 
-![No Fragmentation](heap-nofrag.png)    
+![No Fragmentation](heap-nofrag-dark.png)    
 
 In case you are interested or just curious, [here is an open-sourced version of that linked list implementation](https://github.com/ogxd/optimized-linked-list).    
 You can see how the CPU times and allocations compare with the one from the Dotnet BCL:    
