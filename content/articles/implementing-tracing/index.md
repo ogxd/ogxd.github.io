@@ -127,6 +127,10 @@ With client-side and server-side spans and tracing implemented across all servic
 
 Exceptionally, it can make sense to have an `Activity` for some "internal" asynchronous operations. For instance, a buffering middleware may introduce latency, but it is not per se considered an outgoing I/O (or difficult to consider as such).
 
+### How to Name ActivitySource?
+
+
+
 # Sampling
 
 Sampling is maybe one of the most complex aspects of tracing. It's the process of deciding which traces to keep and which to discard. It's a trade-off between the amount of data you want to collect and the performance overhead of collecting it.  
@@ -183,6 +187,19 @@ Context propagation is what makes tracing distributed: it's the process of passi
 In .NET, the `Activity` class has a `Context` property that holds the trace context. The OpenTelemetry .NET libraries provide "Propagators" to automatically copy the context into HTTP headers when making outgoing HTTP requests, and to extract the context from incoming HTTP requests. It's nice, but you may not want to inject these headers in every request you perform (EG you call a third-party API, they don't need your tracing headers). Also, it will only work for HTTP requests, which is far from covering all the I/Os you might have in your system (gRPC + protobuf, RabbitMQ, Kafka, ...).  
 
 In my opinion, the best way to propagate the context is to do it manually. You can use the `Activity.Current.GetW3CTraceParent()` extension method I provided at the end of this article to get a string that complies with the W3C `traceparent` header format. Then you can pass this string to the next service in the request, either as a header or in any other form for protocols not covered by OpenTelemetry specifications. The `tracestate` header can be read as is from `Activity.Current.TraceStateString`.
+
+To rebuild the context in the next service, you can use the `ActivityContext.Parse` method. You can then create a new `Activity` and set it as the current one, like so:
+```csharp
+if (ActivityContext.TryParse(traceParent, traceState, out ActivityContext activityContext))
+{
+    activity = activitySource.StartActivity("RequestReceived", ActivityKind.Server, activityContext);
+
+    if (activity.IsRecorded()) // Extension method, see at the end of this article
+    {
+        // Enrich activity with some tags
+    }
+}
+```
 
 # Bonus
 

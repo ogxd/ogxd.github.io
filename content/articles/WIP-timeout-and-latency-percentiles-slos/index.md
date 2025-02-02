@@ -1,41 +1,35 @@
----
-title: "Timeout and latency percentiles SLOs for distributed systems"
-date: 2024-02-18T08:11:55+02:00
-draft: true
-summary: 
-tags: 
-- architecture
-- slo
-- timeout
-- latency
-- quantiles
-- percentiles
-- distributed systems
-- microservices
----
+Worklog
 
-WORK IN PROGRESS
+IMHO this Jira is too focused on a solution and is missing a whole context. At this point it’s a shot in the dark.
 
-https://dzone.com/articles/managing-tail-latency
+What are we trying to solve?
 
-During my time at [Equativ](https://equativ.com/), I had the opportunity to work on a distributed system serving hundreds of billions of requests per day, while maintaining high availability and low latency. To meet this last goal, we were using Service Level Objectives (SLOs) to define the expected response time of our services using the 95th percentile of the latency distribution.
+SLIs can vary a lot from pod to pod for a given service on a given cluster. Let’s call least performing pods “outliers“.
 
-In a distributed architecture involving many different services and technologies, latency can be a complex and unpredictable beast, and we had to challenge our assumptions and practices to meet our SLOs more than once. In this article, I would like to take a step back and try to come up with a theoretical and comprehensive approach to managing latency in distributed systems, more specifically on the usage of timeouts.
+A few outliers may impact the service SLIs at the cluster level (eg 95p)
+ SILA / QoS degradation
 
-# Modeling latency percentiles
+Outliers may produce a lot of noise an interrupt engineers in they day to day work
+ Productivity loss / fatigue
 
-![](slo.png)
+A service capacity is scaled based on its worse performing instances (downward leveling)
+ Wasted capacity
 
-#e2e1df
+How can we solve this?
 
-## Sequentialism
+To solve this issue, we need to understand what an “outlier” is. The issue is that this definition is unclear: an outlier may be a pod or a node, it may show individually or as a set, it may due to software bugs, hardware differences or configuration discrepancies, and it may show up different symptoms depending on the rootcause. The process of identifying and solving such issues inherently requires an engineering effort.
 
-# Timeouts / retries / fallbacks
+Naoh is a tool that aims a automatically killing outliers pods based on a set of metrics. In some cases, it's a solution that may allievate engineers from having to investigate, but it’s not a silver bullet. Even worse, it comes we several drawbacks:
+- It requires a lot of tuning to be effective
+- It may kill pods that are not outliers, causing more harm than good (such as new versions)
+- It considers pods as the unit of work, but the issue may be at the node level (it actually is in most cases)
+- It hides the issue, making it harder to understand the rootcause
 
-Exceptions
+We think "outliers" is not an illness that comes and goes, but a symptom of an actual issue that we a bound to tackle, as engineers. Otherwise, we are just hiding the problem under the carpet, and these issues will stack up, making it even more difficult to solve and critical as time goes by.
 
-Logs pollution
-
-Appropriate value?
-
-Pessimistic timeout
+We propose instead to "assist" engineers in identifying and solving these issues, by providing them with the right tools and information, along with a well defined process, which could be described as follows:
+- **Identify**. What is the problem? Is it a pod, a node, a set of nodes? What do we observe? What is the impact?
+- **Investigate**. What is the rootcause? Is it a software bug, a hardware issue, a configuration discrepancy?
+- **Track**. Track and communicate of that issue, so we're aware of it an can plan accordingly, don't forget about it and don't waste time by investigating the same issue over and over again.
+- **Plan**
+- **Solve**. Fix the bug / replace the hardware / update the configuration / ...
