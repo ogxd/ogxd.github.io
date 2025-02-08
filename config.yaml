@@ -79,3 +79,7 @@ params:
     threshold: 0.4
     minMatchCharLength: 0
     keys: ["title", "permalink", "summary", "content", "tags"]
+
+  mermaid:
+    theme: "dark"
+    align: "center"
