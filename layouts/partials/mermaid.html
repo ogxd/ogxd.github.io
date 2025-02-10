@@ -6,7 +6,7 @@
   var config = {
     startOnLoad: true,
     logLevel: 'info',
-    theme:'{{ if site.Params.mermaid.theme }}{{ site.Params.mermaid.theme }}{{ else }}dark{{ end }}',
+    theme:'{{ if site.Params.mermaid.theme }}{{ site.Params.mermaid.theme }}{{ else }}{{ site.Params.defaultTheme }}{{ end }}',
     align:'{{ if site.Params.mermaid.align }}{{ site.Params.mermaid.align }}{{ else }}center{{ end }}',
   };
   mermaid.initialize(config);

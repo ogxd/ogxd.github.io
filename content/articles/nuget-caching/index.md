@@ -89,7 +89,7 @@ That also implies we're rate-limited by IP, which can be a problem if you have a
 
 ## Parallel fetching for NuGet sources
 
-Another finding is that the dotnet NuGet client will fetch the metadata for all sources in parallel. For instance, if your project depends on a public package like `xunit`, the client will fetch the metadata for xunit from nuget.org but also from your private GitLab package registry, even if you don't have any `xunit` package in your registry (it ends up in 404).
+Another finding is that [the dotnet NuGet client will fetch the metadata for all sources in parallel](https://github.com/NuGet/Home/issues/5611#issuecomment-316153517). For instance, if your project depends on a public package like `xunit`, the client will fetch the metadata for xunit from nuget.org but also from your private GitLab package registry, even if you don't have any `xunit` package in your registry (it ends up in 404).
 
 This results in a lot of unnecessary requests to the Gitlab package registry, and again, counts towards the rate limit. Given how many `Microsoft.*` and `System.*` packages we usually have in our projects (to name a few), this can be a lot of requests.
 
