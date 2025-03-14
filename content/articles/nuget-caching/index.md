@@ -60,20 +60,20 @@ sequenceDiagram
 
     Runner->>Registry: /metadata/mypackage/index.json
     activate Registry
-    Registry--xRunner: 401 Unauthorized ❌</br>WWW-Authenticate: Basic realm="GitLab Package Registry"
+    Registry--xRunner: 401 Unauthorized ❌<br/>WWW-Authenticate: Basic realm="GitLab Package Registry"
     deactivate Registry
 
-    Runner->>Registry: /metadata/mypackage/index.json</br>Authorization: Basic ABCDEFG1234
+    Runner->>Registry: /metadata/mypackage/index.json<br/>Authorization: Basic ABCDEFG1234
     activate Registry
     Registry-->>Runner: ✅ List available versions
     deactivate Registry
 
     Runner->>Registry: /download/mypackage/1.2.3/mypackage.1.2.3.nupkg
     activate Registry
-    Registry--xRunner: 401 Unauthorized ❌</br>WWW-Authenticate: Basic realm="GitLab Package Registry"
+    Registry--xRunner: 401 Unauthorized ❌<br/>WWW-Authenticate: Basic realm="GitLab Package Registry"
     deactivate Registry
 
-    Runner->>Registry: /download/mypackage/1.2.3/mypackage.1.2.3.nupkg</br>Authorization: Basic ABCDEFG1234
+    Runner->>Registry: /download/mypackage/1.2.3/mypackage.1.2.3.nupkg<br/>Authorization: Basic ABCDEFG1234
     activate Registry
     Registry-->>Runner: ✅ mypackage.1.2.3.nupkg
     deactivate Registry
@@ -105,10 +105,10 @@ sequenceDiagram
 
     Runner->>Registry: /metadata/xunit/index.json
     activate Registry
-    Registry--xRunner: ❌ 401 Unauthorized</br>WWW-Authenticate: Basic realm="GitLab Package Registry"
+    Registry--xRunner: ❌ 401 Unauthorized<br/>WWW-Authenticate: Basic realm="GitLab Package Registry"
     deactivate Registry
 
-    Runner->>Registry: /metadata/xunit/index.json</br>Authorization: Basic ABCDEFG1234
+    Runner->>Registry: /metadata/xunit/index.json<br/>Authorization: Basic ABCDEFG1234
     activate Registry
     Registry-->>Runner: ❌ 404 Not Found
     deactivate Registry
@@ -121,10 +121,10 @@ sequenceDiagram
 
     Runner->>Registry: /download/xunit/2.9.3/mypackage.2.9.3.nupkg
     activate Registry
-    Registry--xRunner: ❌ 401 Unauthorized</br>WWW-Authenticate: Basic realm="GitLab Package Registry"
+    Registry--xRunner: ❌ 401 Unauthorized<br/>WWW-Authenticate: Basic realm="GitLab Package Registry"
     deactivate Registry
 
-    Runner->>Registry: /download/mypackage/2.9.3/mypackage.2.9.3.nupkg</br>Authorization: Basic ABCDEFG1234
+    Runner->>Registry: /download/mypackage/2.9.3/mypackage.2.9.3.nupkg<br/>Authorization: Basic ABCDEFG1234
     activate Registry
     Registry-->>Runner: ❌ 404 Not Found
     deactivate Registry
@@ -164,7 +164,7 @@ sequenceDiagram
 
     Note over Proxy: "Authorization" header is missing
 
-    Proxy--xRunner: ❌ 401 Unauthorized</br>WWW-Authenticate: Basic realm="GitLab Package Registry"
+    Proxy--xRunner: ❌ 401 Unauthorized<br/>WWW-Authenticate: Basic realm="GitLab Package Registry"
     deactivate Proxy
 
 {{</mermaid>}}
@@ -179,7 +179,7 @@ sequenceDiagram
     participant Proxy
     participant Registry
 
-    Runner->>Proxy: /metadata/xunit/index.json</br>Authorization: Basic ABCDEFG1234
+    Runner->>Proxy: /metadata/xunit/index.json<br/>Authorization: Basic ABCDEFG1234
     activate Proxy
 
     Note over Proxy: Path contains "metadata/xunit"
@@ -209,13 +209,13 @@ sequenceDiagram
 
     Runner->>Proxy: /metadata/mypackage/index.json
     activate Proxy
-    Proxy--xRunner: ❌ 401 Unauthorized</br>WWW-Authenticate: Basic realm="GitLab Package Registry"
+    Proxy--xRunner: ❌ 401 Unauthorized<br/>WWW-Authenticate: Basic realm="GitLab Package Registry"
     deactivate Proxy
 
-    Runner->>Proxy: /metadata/mypackage/index.json</br>Authorization: Basic ABCDEFG1234
+    Runner->>Proxy: /metadata/mypackage/index.json<br/>Authorization: Basic ABCDEFG1234
     activate Proxy
 
-    Proxy->>Registry: /metadata/mypackage/index.json</br>Authorization: Basic ABCDEFG1234
+    Proxy->>Registry: /metadata/mypackage/index.json<br/>Authorization: Basic ABCDEFG1234
     activate Registry
 
     Registry->>Proxy: ✅ List of packages
@@ -228,13 +228,13 @@ sequenceDiagram
 
     Runner->>Proxy: /download/mypackage/1.2.3/mypackage.1.2.3.nupkg
     activate Proxy
-    Proxy--xRunner: ❌ 401 Unauthorized</br>WWW-Authenticate: Basic realm="GitLab Package Registry"
+    Proxy--xRunner: ❌ 401 Unauthorized<br/>WWW-Authenticate: Basic realm="GitLab Package Registry"
     deactivate Proxy
 
-    Runner->>Proxy: /download/mypackage/1.2.3/mypackage.1.2.3.nupkg</br>Authorization: Basic ABCDEFG1234
+    Runner->>Proxy: /download/mypackage/1.2.3/mypackage.1.2.3.nupkg<br/>Authorization: Basic ABCDEFG1234
     activate Proxy
 
-    Proxy->>Registry: /download/mypackage/1.2.3/mypackage.1.2.3.nupkg</br>Authorization: Basic ABCDEFG1234
+    Proxy->>Registry: /download/mypackage/1.2.3/mypackage.1.2.3.nupkg<br/>Authorization: Basic ABCDEFG1234
     activate Registry
 
     Registry->>Proxy: ✅ mypackage.1.2.3.nupkg
@@ -256,10 +256,10 @@ sequenceDiagram
 
     Runner->>Proxy: /metadata/mypackage/index.json
     activate Proxy
-    Proxy--xRunner: ❌ 401 Unauthorized</br>WWW-Authenticate: Basic realm="GitLab Package Registry"
+    Proxy--xRunner: ❌ 401 Unauthorized<br/>WWW-Authenticate: Basic realm="GitLab Package Registry"
     deactivate Proxy
 
-    Runner->>Proxy: /metadata/mypackage/index.json</br>Authorization: Basic ABCDEFG1234
+    Runner->>Proxy: /metadata/mypackage/index.json<br/>Authorization: Basic ABCDEFG1234
     activate Proxy
 
     Note over Proxy: Cache hit!
@@ -269,10 +269,10 @@ sequenceDiagram
 
     Runner->>Proxy: /download/mypackage/1.2.3/mypackage.1.2.3.nupkg
     activate Proxy
-    Proxy--xRunner: ❌ 401 Unauthorized</br>WWW-Authenticate: Basic realm="GitLab Package Registry"
+    Proxy--xRunner: ❌ 401 Unauthorized<br/>WWW-Authenticate: Basic realm="GitLab Package Registry"
     deactivate Proxy
 
-    Runner->>Proxy: /download/mypackage/1.2.3/mypackage.1.2.3.nupkg</br>Authorization: Basic ABCDEFG1234
+    Runner->>Proxy: /download/mypackage/1.2.3/mypackage.1.2.3.nupkg<br/>Authorization: Basic ABCDEFG1234
     activate Proxy
 
     Note over Proxy: Cache hit!
