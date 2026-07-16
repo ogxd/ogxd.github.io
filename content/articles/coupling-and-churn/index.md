@@ -16,7 +16,7 @@ What matters most in a company is where the focus is. In engineering, it is very
 
 Every company wastes resources this way. But companies without clear objectives, and without the courage to say "no", will waste *the majority* of their resources this way, without ever noticing. Sometimes it ultimately kills the product, and occasionally the company itself.
 
-Software is particularly exposed to this because there is virtually no hardware cost to development: nothing physical stops you from building the wrong thing. And with AI agentic coding, producing code has never been cheaper, so it's never been easier to flood a codebase with solutions nobody asked for. The bottleneck was never *writing* the code anyway.
+Software is particularly exposed to this because there is virtually no hardware cost to development: nothing physical stops you from building the wrong thing. And with AI agentic coding, producing code has never been cheaper, so it's never been easier to flood a codebase with solutions nobody asked for. The bottleneck was never *writing* the code anyway, it's knowing what is worth coding.
 
 So how do we know, before building something, how much it will really cost us?
 
@@ -94,7 +94,7 @@ Prototypes and experiments live here too, as long as they *stay* decoupled. That
 
 ## Low churn, high coupling: fine
 
-Now the mirror case: an operating system. It's one of the largest, most complex pieces of software your team touches (millions of lines, and more coupling than anything else in your stack, since literally everything runs on top of it). Yet engineering teams don't spend countless hours on the OS. They just use it, and it works. Same for the compiler, the standard library, a battle-tested serialization library, or that stable internal package nobody has touched in two years. Massive coupling, near-zero churn, near-zero cost.
+Now the opposite case: an operating system. It's one of the largest, most complex pieces of software your team uses every day (millions of lines, and more coupling than anything else in your stack, since literally everything runs on top of it). Yet engineering teams don't spend countless hours updating and fixing their OS. They just use it, and it works. Same for the compiler, the standard library, a battle-tested serialization library, or that stable internal package nobody has touched in two years. Massive coupling, near-zero churn, near-zero cost.
 
 This is the definitive proof that codebase size and complexity are not the cost. If cost were proportional to code, the OS would dominate every team's maintenance budget. It doesn't even appear on it.
 
