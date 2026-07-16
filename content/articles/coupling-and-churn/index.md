@@ -68,7 +68,7 @@ Also note what's absent from the formula: the size of the solution, and its comp
 
 # The four quadrants
 
-```mermaid
+{{<mermaid>}}
 quadrantChart
     x-axis Low coupling --> High coupling
     y-axis Low churn --> High churn
@@ -82,7 +82,7 @@ quadrantChart
     Serialization library: [0.75, 0.2]
     Core API with evolving business rules: [0.85, 0.85]
     One-shot migration script: [0.1, 0.1]
-```
+{{</mermaid>}}
 
 Low churn and low coupling is the ideal, of course. But it's not always achievable: some solutions exist precisely to be depended upon, or precisely to follow a moving business. The good news is that you don't need to be in this quadrant. Either of the two "fine" quadrants is perfectly sustainable.
 
