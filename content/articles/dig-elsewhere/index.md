@@ -1,5 +1,5 @@
 ---
-title: "Dig a hole further away"
+title: "Dig elsewhere"
 date: 2026-11-16T22:00:00+01:00
 draft: false
 katex: true
@@ -47,7 +47,7 @@ You can tell you are in a local optimum without knowing the domain. The signals 
 
 None of these signals proves that a better optimum exists. Together, they suggest that nobody has looked for one.
 
-# The method: dig a hole further away
+# The method: dig elsewhere
 
 When the signals light up, improving what exists is no longer enough. You have to dig elsewhere, starting from scratch, even on a topic you don't master.
 
@@ -139,7 +139,7 @@ It is also a matter of culture around risk and the unexpected. A discovery rarel
 
 AI shifts this debate. When a hole costs an afternoon instead of a quarter, the risk argument fades, and only culture remains. Do we need an explicit exploration budget? Success criteria designed for the new optimum rather than the old one? A way to count what an empty hole has taught us?
 
-The hardest part may not be digging further away. It is accepting that most holes lead nowhere, and counting them as work rather than failures.
+The hardest part may not be digging elsewhere. It is accepting that most holes lead nowhere, and counting them as work rather than failures.
 
 # Try it: /dig-where and /dig-hole
 
